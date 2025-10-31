@@ -1,91 +1,136 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
-/* @import './theme.css'; */
+@import './theme.css';
 
-
+/* Menjaga source paths dari file app.css asli Anda */
 @source '../views/welcome.blade.php';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
 
+/* Varian 'dark' kustom untuk TALL Stack */
 @custom-variant dark (&:where(.dark, .dark *));
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
 
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
+/* SATU-SATUNYA @theme block.
+  Ini adalah hasil terjemahan LENGKAP dari tailwind.config.js 
+  ke sintaks Variabel CSS v4 yang benar.
+*/
+@theme {
+    /* Palet Warna Kustom (Light Mode) */
+    --color-primary: #194240;
+    --color-primary-content: #FFFFFF;
+    --color-primary-500: #194240; /* Alias untuk memenuhi permintaan ring-primary-500 */
+
+    --color-secondary: #F7F1E6;
+    --color-secondary-content: #1C1C1C;
+
+    --color-accent: #C4F000;
+    --color-accent-content: #194240;
+
+    --color-base-100: #FBF9F4;
+    --color-base-content: #1C1C1C;
+    --color-base-content-secondary: #6B6B6B;
+
+    --color-border-color: #E0DACE;
+
+    /* Palet Warna Kustom (Dark Mode) */
+    --color-dark-primary: #1E4E4C;
+    --color-dark-primary-content: #E0E0E0;
+
+    --color-dark-secondary: #262626;
+    --color-dark-secondary-content: #E0E0E0;
+
+    --color-dark-accent: #C4F000;
+    --color-dark-accent-content: #194240;
+
+    --color-dark-base-100: #1A1A1A;
+    --color-dark-base-content: #F0F0F0;
+    --color-dark-base-content-secondary: #9E9E9E;
+
+    --color-dark-border-color: #3A3A3A;
+
+    /* Warna Semantik */
+    --color-info: #3ABFF8;
+    --color-info-dark: #0EA5E9;
+
+    --color-success: #36D399;
+    --color-success-dark: #10B981;
+
+    --color-warning: #FBBD23;
+    --color-warning-dark: #F59E0B;
+
+    --color-danger: #F87272;
+    --color-danger-dark: #EF4444;
+
+    /* Font Kustom */
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: "Playfair Display", ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+
+    /* Transisi Kustom */
+    --transition-colors: background-color, border-color, color, fill, stroke;
+}
+
+/* SATU-SATUNYA @layer base.
+  Menggabungkan semua style dasar dari app.css dan theme.css
+  dan memperbaikinya agar menggunakan variabel @theme yang baru.
 */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
-}
-
-body {
-  @apply font-poppins bg-white text-accent antialiased;
-}
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --color-primary: #ff2b2b;
-  --color-accent: #000000;
-
-  --font-poppins: Poppins, sans-serif;
-    --color-zinc-50: #fafafa;
-    --color-zinc-100: #f5f5f5;
-    --color-zinc-200: #e5e5e5;
-    --color-zinc-300: #d4d4d4;
-    --color-zinc-400: #a3a3a3;
-    --color-zinc-500: #737373;
-    --color-zinc-600: #525252;
-    --color-zinc-700: #404040;
-    --color-zinc-800: #262626;
-    --color-zinc-900: #171717;
-    --color-zinc-950: #0a0a0a;
-
-    --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
-    --color-accent-foreground: var(--color-white);
-}
-
-@layer theme {
-    .dark {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
-        --color-accent-foreground: var(--color-neutral-800);
-    }
-}
-
-@layer base {
-
+    /* Kompatibilitas border v3 -> v4 */
     *,
     ::after,
     ::before,
     ::backdrop,
     ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: var(--color-gray-200, currentcolor);
+    }
+
+    /* Pengaturan dasar HTML */
+    html {
+        @apply scroll-smooth font-sans;
+        color-scheme: light;
+    }
+    html.dark {
+        color-scheme: dark;
+    }
+
+    /* Body menggunakan variabel 'base' dari tema baru */
+    body {
+        @apply bg-base-100 text-base-content antialiased;
+        @apply dark:bg-dark-base-100 dark:text-dark-base-content;
+    }
+
+    /* Heading menggunakan variabel 'serif' dan 'base' dari tema baru */
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-serif font-bold text-base-content;
+        @apply dark:text-dark-base-content;
+    }
+
+    /* Ukuran heading responsif (tidak berubah) */
+    h1 { @apply text-4xl md:text-5xl; }
+    h2 { @apply text-3xl md:text-4xl; }
+    h3 { @apply text-2xl md:text-3xl; }
+    h4 { @apply text-xl md:text-2xl; }
+    h5 { @apply text-lg md:text-xl; }
+    h6 { @apply text-base md:text-lg; }
+
+
+    /* Override Flux UI */
+    [data-flux-field]:not(ui-radio, ui-checkbox) {
+        @apply grid gap-2;
+    }
+
+    [data-flux-label] {
+        @apply !mb-0 !leading-tight;
+    }
+
+    /* PERBAIKAN: 
+      Fokus kini menggunakan 'ring-primary-500' (sesuai permintaan)
+      dan ring-offset diatur ke 'base-100' (latar belakang body).
+    */
+    input:focus[data-flux-control],
+    textarea:focus[data-flux-control],
+    select:focus[data-flux-control] {
+        @apply outline-hidden ring-2 ring-primary-500 ring-offset-2 ring-offset-base-100;
+        @apply dark:ring-offset-dark-base-100;
     }
 }
-
-[data-flux-field]:not(ui-radio, ui-checkbox) {
-    @apply grid gap-2;
-}
-
-[data-flux-label] {
-    @apply  !mb-0 !leading-tight;
-}
-
-input:focus[data-flux-control],
-textarea:focus[data-flux-control],
-select:focus[data-flux-control] {
-    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
-}
-
-/* \[:where(&)\]:size-4 {
-    @apply size-4;
-} */
